@@ -10,7 +10,11 @@
 	</parent>
 
 	<groupId>ru.javabot</groupId>
+	<packaging>pom</packaging>
 	<name>wish-list-tgbot</name>
+	<modules>
+		<module>core</module>
+	</modules>
 	<artifactId>wish-list-tgbot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
