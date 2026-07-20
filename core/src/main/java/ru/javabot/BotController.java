@@ -12,14 +12,14 @@ import org.springframework.beans.factory.annotation.Value;
 @RequiredArgsConstructor
 public class BotController implements SpringLongPollingBot {
 
-//    @Value("${telegram.bot.token}")
-//    private String botToken;
+    @Value("${telegram.bot.token}")
+    private String botToken;
 
     private final UpdateConsumer updateConsumer;
 
     @Override
     public String getBotToken() {
-        return "8700103330:AAEUfG404m-8yizqEvsv5eMlsZ3R3f3YRIU";
+        return botToken;
     }
 
     @Override

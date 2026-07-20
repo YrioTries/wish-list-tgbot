@@ -23,17 +23,17 @@ public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
 
     private final TelegramClient telegramClient;
 
-//    public UpdateConsumer(@Value("${telegram.bot.token}") String botToken) {
-//        this.telegramClient = new OkHttpTelegramClient(
-//                botToken
-//        );
-//    }
-
-    public UpdateConsumer() {
+    public UpdateConsumer(@Value("${telegram.bot.token}") String botToken) {
         this.telegramClient = new OkHttpTelegramClient(
-                "8700103330:AAEUfG404m-8yizqEvsv5eMlsZ3R3f3YRIU"
+                botToken
         );
     }
+
+//    public UpdateConsumer() {
+//        this.telegramClient = new OkHttpTelegramClient(
+//                "8700103330:AAEUfG404m-8yizqEvsv5eMlsZ3R3f3YRIU"
+//        );
+//    }
 
 
 
