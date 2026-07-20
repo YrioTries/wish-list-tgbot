@@ -5,11 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.longpolling.interfaces.LongPollingUpdateConsumer;
 import org.telegram.telegrambots.longpolling.starter.SpringLongPollingBot;
+import org.springframework.beans.factory.annotation.Value;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class BotController implements SpringLongPollingBot {
+
+//    @Value("${telegram.bot.token}")
+//    private String botToken;
 
     private final UpdateConsumer updateConsumer;
 
