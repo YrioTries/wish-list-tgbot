@@ -40,23 +40,20 @@ public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
             String messageText = update.getMessage().getText();
             Long chatId = update.getMessage().getChatId();
 
-            if (messageText.equals("/start")) {
-                sendMainMenu(chatId);
-            } else if (messageText.equals("/keyboard")) {
-                sendKeyBoard(chatId);
-            } else if (messageText.equals("Привет")) {
-                sendMyName(chatId, update.getMessage().getFrom());
-            }
-            else {
-                System.out.printf(
-                        "Пришло сообщение: %s от %s",
-                        messageText,
-                        chatId
-                );
+            switch (messageText) {
+                case "/start" -> sendMainMenu(chatId);
+                case "/keyboard" -> sendKeyBoard(chatId);
+                case "Привет" -> sendMyName(chatId, update.getMessage().getFrom());
+                default -> {
+                    System.out.printf(
+                            "Пришло сообщение: %s от %s",
+                            messageText,
+                            chatId
+                    );
 
-                sendMessage(chatId, "Я не понимаю тебя(("
-                );
-
+                    sendMessage(chatId, ""
+                    );
+                }
             }
         } else if (update.hasCallbackQuery()) {
             handleCallBackQuery(update.getCallbackQuery());
