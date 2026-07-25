@@ -1,4 +1,4 @@
-package ru.javabot.dao;
+package ru.javabot.wishlist.dao;
 
 public enum WishStatus {
     RESERVED,

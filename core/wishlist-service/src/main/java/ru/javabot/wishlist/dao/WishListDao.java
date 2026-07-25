@@ -1,4 +1,4 @@
-package ru.javabot.dao;
+package ru.javabot.wishlist.dao;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,22 +15,22 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class WishList {
+public class WishListDao {
 
     @Id
+    @Column(name = "wishlist_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "wish_id", nullable = false)
-    Wish wish;
+    @Column(name = "wish_id", nullable = false)
+    Long wishId;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "reference_id", nullable = false)
-    Reference reference;
+    ReferenceDao referenceDao;
 
-    @Column(name = "giver_nickname", nullable = false, length = 50)
-    String giverNickname;
+    @Column(name = "owner_nickname", nullable = false, length = 50)
+    String ownerNickname;
 
     @Column(name = "reserved_at", nullable = false)
     LocalDateTime reservedAt;

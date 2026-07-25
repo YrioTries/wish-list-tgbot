@@ -1,4 +1,4 @@
-package ru.javabot.dao;
+package ru.javabot.wishlist.dao;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,7 +12,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Reference {
+public class ReferenceDao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
