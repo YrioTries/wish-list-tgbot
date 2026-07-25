@@ -1,4 +1,4 @@
-package ru.javabot.dao;
+package ru.javabot.wish.dao;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,7 +12,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Wish {
+public class WishDao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "wish_id")
@@ -23,8 +23,4 @@ public class Wish {
 
     @Column(name = "wish_description")
     String description;
-
-    @Column(name = "owner_nickname")
-    String nickname;
-
 }
