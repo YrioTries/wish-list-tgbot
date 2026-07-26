@@ -1,4 +1,4 @@
-package ru.javabot.interaction_api.user;
+package ru.javabot.interaction_api.user.dto;
 
 
 import lombok.*;

@@ -1,4 +1,4 @@
-package ru.javabot.interaction_api.wish;
+package ru.javabot.interaction_api.wish.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
