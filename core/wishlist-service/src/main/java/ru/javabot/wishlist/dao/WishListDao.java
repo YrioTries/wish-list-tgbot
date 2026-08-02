@@ -25,14 +25,14 @@ public class WishListDao {
     @Column(name = "wish_id", nullable = false)
     Long wishId;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "reference_id", nullable = false)
-    ReferenceDao referenceDao;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reference_id")
+    ReferenceDao referenceDao; // Сущность хранящая ссылки на электронный ресурс где можно купить подарок
 
     @Column(name = "owner_nickname", nullable = false, length = 50)
     String ownerNickname;
 
-    @Column(name = "reserved_at", nullable = false)
+    @Column(name = "reserved_at")
     LocalDateTime reservedAt;
 
     @Enumerated(EnumType.STRING)
