@@ -20,17 +20,17 @@ public class WishListDao {
     @Id
     @Column(name = "wishlist_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    Long id; // ID вишлиста
 
     @Column(name = "wish_id", nullable = false)
-    Long wishId;
+    Long wishId; // ID желания
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reference_id")
     ReferenceDao referenceDao; // Сущность хранящая ссылки на электронный ресурс где можно купить подарок
 
-    @Column(name = "owner_nickname", nullable = false, length = 50)
-    String ownerNickname;
+    @Column(name = "owner_id", nullable = false)
+    Long ownerId;
 
     @Column(name = "reserved_at")
     LocalDateTime reservedAt;
