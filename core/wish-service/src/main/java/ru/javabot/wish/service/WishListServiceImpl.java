@@ -1,4 +1,4 @@
-package ru.javabot.service;
+package ru.javabot.wish.service;
 
 public class WishListServiceImpl {
 
