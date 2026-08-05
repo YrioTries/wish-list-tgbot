@@ -18,7 +18,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
-
 import java.util.List;
 
 @Slf4j
@@ -51,7 +50,7 @@ public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
                             chatId
                     );
 
-                    sendMessage(chatId, ""
+                    sendMessage(chatId, "Я пока не знаю как отвечать на такие сообщения, но я быстро учусь!"
                     );
                 }
             }
