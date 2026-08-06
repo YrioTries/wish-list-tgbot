@@ -1,10 +1,8 @@
 package ru.javabot.user.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
 import ru.javabot.interaction_api.exeption.BadRequestException;
 import ru.javabot.interaction_api.exeption.NotFoundException;
 import ru.javabot.interaction_api.user.dto.UserDto;
