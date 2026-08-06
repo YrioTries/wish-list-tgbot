@@ -1,11 +1,11 @@
-package ru.javabot.wishlist.dao;
+package ru.javabot.wish.dao;
 
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Entity
-@Table(name = "reference")
+@Table(name = "product_references")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,6 +19,10 @@ public class ReferenceDao {
     @Column(name = "reference_id")
     Long id;
 
-    @Column(name = "reference", nullable = false, unique = true, length = 255)
+    @Column(
+            name = "reference",
+            unique = true,
+            length = 1000
+    )
     String reference;
 }
