@@ -11,5 +11,9 @@ public interface UserRepository extends JpaRepository<UserDao, Long> {
 
     Optional<UserDao> findByNickname(String nickname);
 
+    Optional<UserDao> findByTelegramChatId(Long telegramChatId);
+
     boolean existsByNickname(String nickname);
+
+    boolean existsByTelegramChatId(Long telegramChatId);
 }
