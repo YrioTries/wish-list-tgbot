@@ -5,10 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Entity
-@Table(
-        name = "users",
-        uniqueConstraints = @UniqueConstraint(columnNames = "telegram_chat_id")
-)
+@Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor
