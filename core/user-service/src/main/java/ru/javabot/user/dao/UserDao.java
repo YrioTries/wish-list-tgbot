@@ -21,7 +21,7 @@ public class UserDao {
     Long id;
 
     @Column(name = "telegram_chat_id", nullable = false, unique = true)
-    Long userChatId;
+    Long telegramChatId;
 
     @Column(name = "nickname", length = 50)
     String nickname;
