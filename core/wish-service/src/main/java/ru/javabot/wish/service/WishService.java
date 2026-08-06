@@ -1,4 +1,4 @@
 package ru.javabot.wish.service;
 
-public class WishListService {
+public interface WishService {
 }
