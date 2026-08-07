@@ -1,6 +1,5 @@
 package ru.javabot.interaction_api.user.dto;
 
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
