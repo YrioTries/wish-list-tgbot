@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 
 public class WishServiceImpl {
 
-
     boolean isExpired(WishDao wish, Clock clock) {
         return wish.getStatus() == WishStatus.RESERVED
                 && wish.getReservedAt() != null
