@@ -1,9 +1,9 @@
 package ru.javabot.interaction_api.wish.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -11,9 +11,12 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class WishDto {
+
     Long id;
-    @NotBlank
-    @Size(min = 3, max = 50)
+    Long wishlistId;
     String name;
+    Long referenceId;
+    WishStatus status;
+    Long expectedPrice;
     String description;
 }
