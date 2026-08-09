@@ -5,6 +5,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import ru.javabot.interaction_api.wish.dto.WishStatus;
 
 import java.time.LocalDateTime;
 

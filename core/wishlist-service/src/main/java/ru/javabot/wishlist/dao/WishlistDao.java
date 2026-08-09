@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import ru.javabot.interaction_api.wishlist.dto.AccessRights;
 
 @Entity
 @Table(name = "wishlist")
