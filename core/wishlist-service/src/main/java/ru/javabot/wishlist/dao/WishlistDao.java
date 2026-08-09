@@ -14,7 +14,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class WishListDao {
+public class WishlistDao {
 
     @Id
     @Column(name = "wishlist_id")
