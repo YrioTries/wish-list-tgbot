@@ -1,7 +1,7 @@
 package ru.javabot.wish.service;
 
 import ru.javabot.wish.dao.WishDao;
-import ru.javabot.wish.dao.WishStatus;
+import ru.javabot.interaction_api.wish.dto.WishStatus;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
