@@ -2,6 +2,7 @@ package ru.javabot.wish.dao;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -21,7 +22,8 @@ public class WishDao {
     @Column(name = "wish_id")
     Long id;
 
-    @Column(name = "wish_name")
+    @Size(min = 3, max = 150)
+    @Column(name = "wish_name", nullable = false, length = 150)
     String name;
 
     @Column(name = "wishlist_id", nullable = false)
@@ -44,6 +46,7 @@ public class WishDao {
     @Column(name = "expected_price")
     Long expectedPrice;
 
-    @Column(name = "wish_description")
+    @Size(max = 1000)
+    @Column(name = "wish_description", length = 1000)
     String description;
 }

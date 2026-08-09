@@ -20,6 +20,6 @@ public class UserDao {
     @Column(name = "telegram_chat_id", nullable = false, unique = true)
     Long telegramChatId;
 
-    @Column(name = "nickname", length = 50)
+    @Column(name = "nickname", unique = true, length = 50)
     String nickname;
 }

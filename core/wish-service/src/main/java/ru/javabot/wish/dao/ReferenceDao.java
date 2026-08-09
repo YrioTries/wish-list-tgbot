@@ -21,6 +21,7 @@ public class ReferenceDao {
 
     @Column(
             name = "reference",
+            nullable = false,
             unique = true,
             length = 1000
     )

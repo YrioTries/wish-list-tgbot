@@ -10,6 +10,8 @@ import ru.javabot.user.dao.UserDao;
 import ru.javabot.user.dao.UserMapper;
 import ru.javabot.user.repository.UserRepository;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -32,7 +34,6 @@ public class UserServiceImpl implements UserService{
             throw new BadRequestException("User with @" + userDto.getNickname() + " already exists");
         }
         UserDao userDao = userMapper.toDao(userDto);
-        userRepository.save(userDao);
         return userMapper.toDto(userRepository.save(userDao));
     }
 
@@ -42,9 +43,19 @@ public class UserServiceImpl implements UserService{
         UserDao userDao = userRepository.findByTelegramChatId(chatId)
                 .orElseThrow(() -> new NotFoundException("User with chatId " + chatId + " not found"));
 
-        if (userRepository.existsByNickname(newNickname) &&
-                !userDao.getNickname().equals(newNickname)) {
-            throw new BadRequestException("Nickname @" + newNickname + " is already taken");
+
+        boolean nicknameTaken = userRepository.existsByNickname(newNickname);
+
+        boolean nicknameBelongsToCurrentUser =
+                Objects.equals(
+                        userDao.getNickname(),
+                        newNickname
+                );
+
+        if (nicknameTaken && !nicknameBelongsToCurrentUser) {
+            throw new BadRequestException(
+                    "Nickname @" + newNickname + " is already taken"
+            );
         }
 
         userDao.setNickname(newNickname);
