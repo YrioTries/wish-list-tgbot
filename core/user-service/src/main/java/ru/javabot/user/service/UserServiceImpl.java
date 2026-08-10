@@ -29,11 +29,11 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional
-    public UserDto addNewUser(UserDto userDto) {
-        if (userRepository.existsByNickname(userDto.getNickname())) {
-            throw new BadRequestException("User with @" + userDto.getNickname() + " already exists");
+    public UserDto addNewUser(CreateUserRequest userRequest) {
+        if (userRepository.existsByNickname(userRequest.getNickname())) {
+            throw new BadRequestException("User with @" + userRequest.getNickname() + " already exists");
         }
-        UserDao userDao = userMapper.toDao(userDto);
+        UserDao userDao = userMapper.toDao(userRequest);
         return userMapper.toDto(userRepository.save(userDao));
     }
 
