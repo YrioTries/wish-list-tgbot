@@ -30,8 +30,9 @@ public class WishDao {
     @Column(name = "wishlist_id", nullable = false)
     Long wishlistId;
 
-    @Column(name = "reference_id")
-    Long referenceId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reference_id")
+    ReferenceDao reference;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 20)
