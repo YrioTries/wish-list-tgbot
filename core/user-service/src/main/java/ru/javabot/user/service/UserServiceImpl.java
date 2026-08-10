@@ -5,11 +5,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javabot.interaction_api.exeption.BadRequestException;
 import ru.javabot.interaction_api.exeption.NotFoundException;
+import ru.javabot.interaction_api.user.dto.CreateUserRequest;
 import ru.javabot.interaction_api.user.dto.UserDto;
 import ru.javabot.user.dao.UserDao;
 import ru.javabot.user.dao.UserMapper;
 import ru.javabot.user.repository.UserRepository;
 
+import java.util.Locale;
 import java.util.Objects;
 
 @Service
