@@ -11,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CreateWishRequest {
+public class CreateWishlistRequest {
 
     @NotBlank
     @Size(min = 3, max = 150)
