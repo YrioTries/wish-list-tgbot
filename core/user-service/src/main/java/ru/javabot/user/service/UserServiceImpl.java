@@ -62,9 +62,77 @@ public class UserServiceImpl implements UserService{
         return userMapper.toDto(userRepository.save(userDao));
     }
 
-    private void checkUserNickname(String nickname) {
-        if (!userRepository.existsByNickname(nickname)) {
-            throw new NotFoundException("No user with the same nickname");
+    @Transactional
+    public UserDto synchronizeTelegramUser(
+            Long chatId,
+            String telegramUsername
+    ) {
+        String newUsername = normalizeUsername(telegramUsername);
+
+        UserDao currentUser = userRepository
+                .findByTelegramChatId(chatId)
+                .orElseGet(() -> {
+                    UserDao user = new UserDao();
+                    user.setTelegramChatId(chatId);
+                    return user;
+                });
+
+        /*
+         * Если username не изменился,
+         * никаких дополнительных действий не требуется.
+         */
+        if (Objects.equals(currentUser.getNickname(), newUsername)) {
+            return userMapper.toDto(currentUser);
         }
+
+        /*
+         * Если Telegram прислал нового username,
+         * проверяем, не осталась ли такая запись
+         * за другим chatId.
+         */
+        if (newUsername != null) {
+            userRepository.findByNickname(newUsername)
+                    .filter(existingUser ->
+                            !Objects.equals(
+                                    existingUser.getTelegramChatId(),
+                                    chatId
+                            )
+                    )
+                    .ifPresent(existingUser -> {
+                        /*
+                         * Освобождаем username у старого пользователя.
+                         */
+                        existingUser.setNickname(null);
+
+                        /*
+                         * Сначала фиксируем освобождение username
+                         * в базе данных.
+                         */
+                        userRepository.saveAndFlush(existingUser);
+                    });
+        }
+        /*
+         * Если newUsername == null,
+         * старый username будет удалён у текущего пользователя.
+
+         * Если newUsername содержит значение,
+         * он будет закреплён за текущим пользователем.
+         */
+        currentUser.setNickname(newUsername);
+
+        UserDao savedUser = userRepository.save(currentUser);
+
+        return userMapper.toDto(savedUser);
     }
+    private String normalizeUsername(String username) {
+        if (username == null || username.isBlank()) {
+            return null;
+        }
+
+        return username
+                .trim()
+                .replaceFirst("^@", "")
+                .toLowerCase(Locale.ROOT);
+    }
+
 }
