@@ -2,9 +2,6 @@ package ru.javabot.interaction_api.wishlist.dto;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.javabot.interaction_api.wish.dto.WishDto;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -12,7 +9,8 @@ import java.util.List;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class WishlistDto {
+    Long id;
+    Long ownerId;
     String name;
     AccessRights accessRights;
-    List<WishDto> gifts;
 }
