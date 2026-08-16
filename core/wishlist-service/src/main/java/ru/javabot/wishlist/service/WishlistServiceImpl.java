@@ -9,6 +9,8 @@ import ru.javabot.wishlist.dao.WishlistDao;
 import ru.javabot.wishlist.dao.WishlistMapper;
 import ru.javabot.wishlist.repository.WishlistRepository;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -22,5 +24,13 @@ public class WishlistServiceImpl implements WishlistService{
         wishlistDao.setOwnerId(ownerId);
         WishlistDao wishlistDaoUpdated = wishlistRepository.save(wishlistDao);
         return wishlistMapper.toDto(wishlistDaoUpdated);
+    }
+
+    public List<WishlistDto> showWishlists(Long ownerId) {
+        List<WishlistDao> wishlistDaoList = wishlistRepository.findByOwnerId(ownerId);
+
+        return wishlistDaoList.stream()
+                .map(wishlistMapper::toDto)
+                .toList();
     }
 }
