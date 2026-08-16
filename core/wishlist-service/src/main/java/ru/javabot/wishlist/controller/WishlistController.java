@@ -19,6 +19,6 @@ public class WishlistController {
 
     @PostMapping
     public WishlistDto addNewWish(Long ownerId, @RequestBody CreateWishlistRequest wishlistRequest) {
-        return wishlistService.addNewWish(ownerId, wishlistRequest);
+        return wishlistService.addNewWishlist(ownerId, wishlistRequest);
     }
 }

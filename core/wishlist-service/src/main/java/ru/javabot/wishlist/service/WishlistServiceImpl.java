@@ -17,7 +17,7 @@ public class WishlistServiceImpl implements WishlistService{
     private final WishlistRepository wishlistRepository;
 
     @Transactional
-    public WishlistDto addNewWish(Long ownerId, CreateWishlistRequest wishlistRequest) {
+    public WishlistDto addNewWishlist(Long ownerId, CreateWishlistRequest wishlistRequest) {
         WishlistDao wishlistDao = wishlistMapper.toDao(wishlistRequest);
         wishlistDao.setOwnerId(ownerId);
         WishlistDao wishlistDaoUpdated = wishlistRepository.save(wishlistDao);
