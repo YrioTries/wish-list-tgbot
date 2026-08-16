@@ -69,7 +69,7 @@ class UserServiceImplTest {
 
         // Act
         UserDto result =
-                userService.findUserByUsername(nickname);
+                userService.findUserByNickname(nickname);
 
         // Assert
         assertNotNull(result);
@@ -105,7 +105,7 @@ class UserServiceImplTest {
         // Act
         NotFoundException exception = assertThrows(
                 NotFoundException.class,
-                () -> userService.findUserByUsername(nickname)
+                () -> userService.findUserByNickname(nickname)
         );
 
         // Assert

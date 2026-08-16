@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService{
     private final UserMapper userMapper;
 
     @Override
-    public UserDto findUserByUsername(String nickname) {
+    public UserDto findUserByNickname(String nickname) {
         UserDao user = userRepository.findByNickname(nickname)
                 .orElseThrow(() -> new NotFoundException("Пользователь с никнеймом " + nickname + " не найден"));
 
