@@ -25,8 +25,6 @@ public class WishlistDao {
     @Column(name = "owner_id", nullable = false)
     Long ownerId;
 
-    @NotBlank
-    @Size(max = 100)
     @Column(name = "name", nullable = false, length = 100)
     String name;
 
