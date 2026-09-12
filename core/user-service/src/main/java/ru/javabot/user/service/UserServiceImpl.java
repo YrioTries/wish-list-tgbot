@@ -17,14 +17,30 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
+
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
     @Override
     public UserDto findUserByNickname(String nickname) {
-        UserDao user = userRepository.findByNickname(nickname)
-                .orElseThrow(() -> new NotFoundException("Пользователь с никнеймом " + nickname + " не найден"));
+        String normalizedNickname = normalizeUsername(nickname);
+
+        if (normalizedNickname == null) {
+            throw new BadRequestException(
+                    "Никнейм не может быть пустым"
+            );
+        }
+
+        UserDao user = userRepository
+                .findByNickname(normalizedNickname)
+                .orElseThrow(() ->
+                        new NotFoundException(
+                                "Пользователь с никнеймом @" +
+                                        normalizedNickname +
+                                        " не найден"
+                        )
+                );
 
         return userMapper.toDto(user);
     }
@@ -32,44 +48,73 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional
     public UserDto addNewUser(CreateUserRequest userRequest) {
-        if (userRepository.existsByNickname(userRequest.getNickname())) {
-            throw new BadRequestException("User with @" + userRequest.getNickname() + " already exists");
+        String nickname = normalizeUsername(userRequest.getNickname());
+
+        if (nickname != null &&
+                userRepository.existsByNickname(nickname)) {
+            throw new BadRequestException(
+                    "Пользователь с @" + nickname +
+                            " уже существует"
+            );
         }
+
         UserDao userDao = userMapper.toDao(userRequest);
-        return userMapper.toDto(userRepository.save(userDao));
+        userDao.setNickname(nickname);
+
+        return userMapper.toDto(
+                userRepository.save(userDao)
+        );
     }
 
     @Override
     @Transactional
-    public UserDto updateNickname(Long chatId, String newNickname) {
-        UserDao userDao = userRepository.findByTelegramChatId(chatId)
-                .orElseThrow(() -> new NotFoundException("User with chatId " + chatId + " not found"));
-
-
-        boolean nicknameTaken = userRepository.existsByNickname(newNickname);
-
-        boolean nicknameBelongsToCurrentUser =
-                Objects.equals(
-                        userDao.getNickname(),
-                        newNickname
+    public UserDto updateNickname(
+            Long chatId,
+            String newNickname
+    ) {
+        UserDao userDao = userRepository
+                .findByTelegramChatId(chatId)
+                .orElseThrow(() ->
+                        new NotFoundException(
+                                "Пользователь с chatId " +
+                                        chatId +
+                                        " не найден"
+                        )
                 );
 
-        if (nicknameTaken && !nicknameBelongsToCurrentUser) {
+        String normalizedNickname =
+                normalizeUsername(newNickname);
+
+        if (normalizedNickname == null) {
             throw new BadRequestException(
-                    "Nickname @" + newNickname + " is already taken"
+                    "Никнейм не может быть пустым"
             );
         }
 
-        userDao.setNickname(newNickname);
-        return userMapper.toDto(userRepository.save(userDao));
+        boolean nicknameTaken =
+                userRepository.existsByNicknameAndIdNot(
+                        normalizedNickname,
+                        userDao.getId()
+                );
+
+        if (nicknameTaken) {
+            throw new BadRequestException(
+                    "Никнейм @" + normalizedNickname +
+                            " уже занят"
+            );
+        }
+
+        userDao.setNickname(normalizedNickname);
+
+        return userMapper.toDto(
+                userRepository.save(userDao)
+        );
     }
 
     @Transactional
-    public UserDto synchronizeTelegramUser(
-            Long chatId,
-            String telegramUsername
-    ) {
-        String newUsername = normalizeUsername(telegramUsername);
+    public UserDto synchronizeTelegramUser(Long chatId, String telegramUsername) {
+        String newUsername =
+                normalizeUsername(telegramUsername);
 
         UserDao currentUser = userRepository
                 .findByTelegramChatId(chatId)
@@ -79,19 +124,13 @@ public class UserServiceImpl implements UserService{
                     return user;
                 });
 
-        /*
-         * Если username не изменился,
-         * никаких дополнительных действий не требуется.
-         */
-        if (Objects.equals(currentUser.getNickname(), newUsername)) {
+        if (Objects.equals(
+                currentUser.getNickname(),
+                newUsername
+        )) {
             return userMapper.toDto(currentUser);
         }
 
-        /*
-         * Если Telegram прислал нового username,
-         * проверяем, не осталась ли такая запись
-         * за другим chatId.
-         */
         if (newUsername != null) {
             userRepository.findByNickname(newUsername)
                     .filter(existingUser ->
@@ -101,40 +140,29 @@ public class UserServiceImpl implements UserService{
                             )
                     )
                     .ifPresent(existingUser -> {
-                        /*
-                         * Освобождаем username у старого пользователя.
-                         */
                         existingUser.setNickname(null);
-
-                        /*
-                         * Сначала фиксируем освобождение username
-                         * в базе данных.
-                         */
                         userRepository.saveAndFlush(existingUser);
                     });
         }
-        /*
-         * Если newUsername == null,
-         * старый username будет удалён у текущего пользователя.
 
-         * Если newUsername содержит значение,
-         * он будет закреплён за текущим пользователем.
-         */
         currentUser.setNickname(newUsername);
 
-        UserDao savedUser = userRepository.save(currentUser);
-
-        return userMapper.toDto(savedUser);
+        return userMapper.toDto(
+                userRepository.save(currentUser)
+        );
     }
+
     private String normalizeUsername(String username) {
         if (username == null || username.isBlank()) {
             return null;
         }
 
-        return username
-                .trim()
-                .replaceFirst("^@", "")
-                .toLowerCase(Locale.ROOT);
-    }
+        String normalized = username.trim();
 
+        if (normalized.startsWith("@")) {
+            normalized = normalized.substring(1);
+        }
+
+        return normalized.toLowerCase(Locale.ROOT);
+    }
 }

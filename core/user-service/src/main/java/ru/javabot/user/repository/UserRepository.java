@@ -7,13 +7,17 @@ import ru.javabot.user.dao.UserDao;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<UserDao, Long> {
+public interface UserRepository
+        extends JpaRepository<UserDao, Long> {
+
+    Optional<UserDao> findByTelegramChatId(Long chatId);
 
     Optional<UserDao> findByNickname(String nickname);
 
-    Optional<UserDao> findByTelegramChatId(Long telegramChatId);
-
     boolean existsByNickname(String nickname);
 
-    boolean existsByTelegramChatId(Long telegramChatId);
+    boolean existsByNicknameAndIdNot(
+            String nickname,
+            Long id
+    );
 }
