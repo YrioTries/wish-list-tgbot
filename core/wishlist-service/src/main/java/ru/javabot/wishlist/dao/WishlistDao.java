@@ -3,7 +3,7 @@ package ru.javabot.wishlist.dao;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import ru.javabot.interaction_api.wishlist.dto.AccessRights;
+import ru.javabot.interaction_api.model.wishlist.dto.AccessRights;
 
 @Entity
 @Table(name = "wishlist")

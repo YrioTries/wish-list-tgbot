@@ -3,8 +3,8 @@ package ru.javabot.user.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.javabot.interaction_api.user.dto.CreateUserRequest;
-import ru.javabot.interaction_api.user.dto.UserDto;
+import ru.javabot.interaction_api.model.user.dto.CreateUserRequest;
+import ru.javabot.interaction_api.model.user.dto.UserDto;
 import ru.javabot.user.service.UserService;
 
 @RestController

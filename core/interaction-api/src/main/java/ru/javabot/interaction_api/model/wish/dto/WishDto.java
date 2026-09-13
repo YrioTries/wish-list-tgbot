@@ -1,9 +1,7 @@
-package ru.javabot.interaction_api.wish.dto;
+package ru.javabot.interaction_api.model.wish.dto;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Setter

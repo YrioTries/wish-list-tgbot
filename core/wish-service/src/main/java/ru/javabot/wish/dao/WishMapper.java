@@ -3,8 +3,8 @@ package ru.javabot.wish.dao;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import ru.javabot.interaction_api.wish.dto.CreateWishRequest;
-import ru.javabot.interaction_api.wish.dto.WishDto;
+import ru.javabot.interaction_api.model.wish.dto.CreateWishRequest;
+import ru.javabot.interaction_api.model.wish.dto.WishDto;
 
 
 @Mapper(componentModel = "spring",

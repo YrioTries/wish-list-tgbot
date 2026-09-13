@@ -1,4 +1,4 @@
-package ru.javabot.interaction_api.user.dto;
+package ru.javabot.interaction_api.model.wishlist.dto;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,8 +8,9 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserDto {
+public class WishlistDto {
     Long id;
-    Long telegramChatId;
-    String nickname;
+    Long ownerId;
+    String name;
+    AccessRights accessRights;
 }

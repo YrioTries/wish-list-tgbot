@@ -1,7 +1,7 @@
 package ru.javabot.user.service;
 
-import ru.javabot.interaction_api.user.dto.CreateUserRequest;
-import ru.javabot.interaction_api.user.dto.UserDto;
+import ru.javabot.interaction_api.model.user.dto.CreateUserRequest;
+import ru.javabot.interaction_api.model.user.dto.UserDto;
 
 public interface UserService {
     UserDto findUserByNickname(String nickname);

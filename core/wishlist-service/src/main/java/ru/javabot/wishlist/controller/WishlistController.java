@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.javabot.interaction_api.wishlist.dto.CreateWishlistRequest;
-import ru.javabot.interaction_api.wishlist.dto.WishlistDto;
+import ru.javabot.interaction_api.model.wishlist.dto.CreateWishlistRequest;
+import ru.javabot.interaction_api.model.wishlist.dto.WishlistDto;
 import ru.javabot.wishlist.service.WishlistService;
 
 import java.util.List;

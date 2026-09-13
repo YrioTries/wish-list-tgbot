@@ -1,4 +1,4 @@
-package ru.javabot.interaction_api.wish.dto;
+package ru.javabot.interaction_api.model.wish.dto;
 
 public enum WishStatus {
     AVAILABLE,
