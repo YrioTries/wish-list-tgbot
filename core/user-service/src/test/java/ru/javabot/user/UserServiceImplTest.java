@@ -1,10 +1,14 @@
 package ru.javabot.user;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import ru.javabot.interaction_api.exeption.BadRequestException;
 import ru.javabot.interaction_api.exeption.NotFoundException;
 import ru.javabot.interaction_api.model.user.dto.CreateUserRequest;
@@ -16,9 +20,14 @@ import ru.javabot.user.service.UserServiceImpl;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
@@ -32,9 +41,12 @@ class UserServiceImplTest {
     @InjectMocks
     private UserServiceImpl userService;
 
+    @Captor
+    private ArgumentCaptor<UserDao> userDaoCaptor;
+
     @Test
-    void findUserByUsername_shouldReturnUser_whenUserExists() {
-        // Arrange
+    @DisplayName("Находит пользователя по нормализованному никнейму")
+    void findUserByNickname_shouldReturnUser_whenUserExists() {
         String nickname = "dmitriy";
 
         UserDao userDao = UserDao.builder()
@@ -43,97 +55,41 @@ class UserServiceImplTest {
                 .nickname(nickname)
                 .build();
 
-        UserDto expectedDto = new UserDto(
-                1L,
-                100L,
-                nickname
-        );
+        UserDto expectedDto = new UserDto(1L, 100L, nickname);
 
-    /*
-     * Настраиваем мок репозитория.
-
-     * Когда сервис выполнит поиск по никнейму "dmitriy",
-       репозиторий должен вернуть найденного пользователя.
-    */
         when(userRepository.findByNickname(nickname))
                 .thenReturn(Optional.of(userDao));
+        when(userMapper.toDto(userDao)).thenReturn(expectedDto);
 
-    /*
-     * Настраиваем мок маппера.
+        UserDto result = userService.findUserByNickname(nickname);
 
-     * Когда сервис передаст найденный UserDao в маппер,
-       маппер должен вернуть подготовленный UserDto.
-    */
-        when(userMapper.toDto(userDao))
-                .thenReturn(expectedDto);
+        assertThat(result).isEqualTo(expectedDto);
 
-        // Act
-        UserDto result =
-                userService.findUserByNickname(nickname);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(1L, result.getId());
-        assertEquals(100L, result.getTelegramChatId());
-        assertEquals(nickname, result.getNickname());
-
-        /*
-         * Проверяем, что репозиторий вызван с нужным никнеймом.
-         */
-        verify(userRepository)
-                .findByNickname(nickname);
-
-        /*
-         * Проверяем, что найденный UserDao преобразован в DTO.
-         */
-        verify(userMapper)
-                .toDto(userDao);
+        verify(userRepository).findByNickname(nickname);
+        verify(userMapper).toDto(userDao);
+        verifyNoMoreInteractions(userRepository, userMapper);
     }
 
     @Test
-    void findUserByUsername_shouldThrowException_whenUserDoesNotExist() {
-        // Arrange
-        String nickname = "unknown";
-
-        /*
-         * Имитируем ситуацию, когда пользователь
-         * отсутствует в базе данных.
-         */
-        when(userRepository.findByNickname(nickname))
+    @DisplayName("Бросает NotFoundException, если пользователь не найден")
+    void findUserByNickname_shouldThrowException_whenUserDoesNotExist() {
+        when(userRepository.findByNickname("unknown"))
                 .thenReturn(Optional.empty());
 
-        // Act
-        NotFoundException exception = assertThrows(
-                NotFoundException.class,
-                () -> userService.findUserByNickname(nickname)
-        );
+        assertThatThrownBy(() -> userService.findUserByNickname("unknown"))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("Пользователь с никнеймом @unknown не найден");
 
-        // Assert
-        assertEquals(
-                "Пользователь с никнеймом " + nickname + " не найден",
-                exception.getMessage()
-        );
-
-    /*
-     * Если пользователь не найден,
-       маппер не должен вызываться.
-    */
-        verify(userMapper, never())
-                .toDto(any(UserDao.class));
+        verify(userMapper, never()).toDto(any(UserDao.class));
     }
 
     @Test
+    @DisplayName("Создаёт пользователя, если никнейм свободен")
     void addNewUser_shouldCreateUser_whenNicknameIsFree() {
-        // Arrange
-        CreateUserRequest request = new CreateUserRequest(
-                100L,
-                "dmitriy"
-        );
+        CreateUserRequest request = new CreateUserRequest(100L, "dmitriy");
 
-        UserDao userDao = UserDao.builder()
-                .telegramChatId(100L)
-                .nickname("dmitriy")
-                .build();
+        UserDao userDao = new UserDao();
+        userDao.setTelegramChatId(100L);
 
         UserDao savedUserDao = UserDao.builder()
                 .id(1L)
@@ -141,120 +97,42 @@ class UserServiceImplTest {
                 .nickname("dmitriy")
                 .build();
 
-        UserDto resultDto = new UserDto(
-                1L,
-                100L,
-                "dmitriy"
-        );
+        UserDto expectedDto = new UserDto(1L, 100L, "dmitriy");
 
-        /*
-         * Никнейм свободен, поэтому пользователь
-         * может быть добавлен.
-         */
-        when(userRepository.existsByNickname("dmitriy"))
-                .thenReturn(false);
+        when(userRepository.existsByNickname("dmitriy")).thenReturn(false);
+        when(userMapper.toDao(request)).thenReturn(userDao);
+        when(userRepository.save(userDao)).thenReturn(savedUserDao);
+        when(userMapper.toDto(savedUserDao)).thenReturn(expectedDto);
 
-        /*
-         * Преобразуем входной CreateUserRequest
-         * в объект UserDao.
-         */
-        when(userMapper.toDao(request))
-                .thenReturn(userDao);
+        UserDto result = userService.addNewUser(request);
 
-    /*
-     * Имитируем сохранение пользователя.
+        assertThat(result).isEqualTo(expectedDto);
 
-     * Репозиторий возвращает объект уже с ID,
-       который был сгенерирован базой данных.
-    */
-        when(userRepository.save(userDao))
-                .thenReturn(savedUserDao);
+        verify(userRepository).save(userDaoCaptor.capture());
 
-        /*
-         * Преобразуем сохранённый UserDao в UserDto.
-         */
-        when(userMapper.toDto(savedUserDao))
-                .thenReturn(resultDto);
-
-        // Act
-        UserDto result =
-                userService.addNewUser(request);
-
-        // Assert
-        assertNotNull(result);
-        assertEquals(1L, result.getId());
-        assertEquals(100L, result.getTelegramChatId());
-        assertEquals("dmitriy", result.getNickname());
-
-        /*
-         * Проверяем проверку существования никнейма.
-         */
-        verify(userRepository)
-                .existsByNickname("dmitriy");
-
-        /*
-         * Проверяем преобразование запроса в UserDao.
-         */
-        verify(userMapper)
-                .toDao(request);
-
-        /*
-         * Проверяем сохранение пользователя.
-         */
-        verify(userRepository)
-                .save(userDao);
-
-        /*
-         * Проверяем преобразование сохранённого пользователя в DTO.
-         */
-        verify(userMapper)
-                .toDto(savedUserDao);
+        assertThat(userDaoCaptor.getValue().getNickname())
+                .isEqualTo("dmitriy");
     }
 
     @Test
+    @DisplayName("Бросает BadRequestException, если никнейм уже существует")
     void addNewUser_shouldThrowException_whenNicknameAlreadyExists() {
-        // Arrange
-        CreateUserRequest request = new CreateUserRequest(
-                100L,
-                "dmitriy"
-        );
+        CreateUserRequest request = new CreateUserRequest(100L, "dmitriy");
 
-        /*
-         * Имитируем ситуацию, когда пользователь
-         * с таким никнеймом уже есть в базе данных.
-         */
-        when(userRepository.existsByNickname("dmitriy"))
-                .thenReturn(true);
+        when(userRepository.existsByNickname("dmitriy")).thenReturn(true);
 
-        // Act
-        BadRequestException exception = assertThrows(
-                BadRequestException.class,
-                () -> userService.addNewUser(request)
-        );
+        assertThatThrownBy(() -> userService.addNewUser(request))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage("Пользователь с @dmitriy уже существует");
 
-        // Assert
-        assertEquals(
-                "User with @dmitriy already exists",
-                exception.getMessage()
-        );
-
-        /*
-         * Если никнейм занят, новый пользователь
-         * не должен преобразовываться и сохраняться.
-         */
-        verify(userMapper, never())
-                .toDao(any(CreateUserRequest.class));
-
-        verify(userRepository, never())
-                .save(any(UserDao.class));
-
-        verify(userMapper, never())
-                .toDto(any(UserDao.class));
+        verify(userMapper, never()).toDao(any(CreateUserRequest.class));
+        verify(userRepository, never()).save(any(UserDao.class));
+        verify(userMapper, never()).toDto(any(UserDao.class));
     }
 
     @Test
+    @DisplayName("Обновляет никнейм, если новый никнейм свободен")
     void updateNickname_shouldUpdateNickname_whenNewNicknameIsFree() {
-        // Arrange
         Long chatId = 100L;
         String newNickname = "new_name";
 
@@ -264,172 +142,69 @@ class UserServiceImplTest {
                 .nickname("old_name")
                 .build();
 
-        UserDao savedUserDao = UserDao.builder()
-                .id(1L)
-                .telegramChatId(chatId)
-                .nickname(newNickname)
-                .build();
+        UserDto expectedDto = new UserDto(1L, chatId, newNickname);
 
-        UserDto resultDto = new UserDto(
-                1L,
-                chatId,
-                newNickname
-        );
-
-        /*
-         * Находим пользователя по Telegram chat ID.
-         */
         when(userRepository.findByTelegramChatId(chatId))
                 .thenReturn(Optional.of(userDao));
 
-    /*
-     * Проверяем новый никнейм.
-
-     * false означает, что новый никнейм
-       ещё никем не занят.
-    */
-        when(userRepository.existsByNickname(newNickname))
+        when(userRepository.existsByNicknameAndIdNot(newNickname, 1L))
                 .thenReturn(false);
 
-        /*
-         * Имитируем сохранение изменённого пользователя.
-         */
-        when(userRepository.save(userDao))
-                .thenReturn(savedUserDao);
+        when(userRepository.save(userDao)).thenReturn(userDao);
+        when(userMapper.toDto(userDao)).thenReturn(expectedDto);
 
-        /*
-         * Преобразуем сохранённого пользователя в DTO.
-         */
-        when(userMapper.toDto(savedUserDao))
-                .thenReturn(resultDto);
+        UserDto result = userService.updateNickname(chatId, newNickname);
 
-        // Act
-        UserDto result =
-                userService.updateNickname(chatId, newNickname);
+        assertThat(result).isEqualTo(expectedDto);
+        assertThat(userDao.getNickname()).isEqualTo(newNickname);
 
-        // Assert
-        assertNotNull(result);
-        assertEquals(newNickname, result.getNickname());
-
-    /*
-     * Проверяем, что объект UserDao действительно
-       получил новый никнейм до сохранения.
-    */
-        assertEquals(newNickname, userDao.getNickname());
-
-        /*
-         * Проверяем поиск пользователя.
-         */
-        verify(userRepository)
-                .findByTelegramChatId(chatId);
-
-        /*
-         * Проверяем проверку занятости никнейма.
-         */
-        verify(userRepository)
-                .existsByNickname(newNickname);
-
-        /*
-         * Проверяем сохранение изменённого пользователя.
-         */
-        verify(userRepository)
-                .save(userDao);
-
-        /*
-         * Проверяем преобразование результата в DTO.
-         */
-        verify(userMapper)
-                .toDto(savedUserDao);
+        verify(userRepository).existsByNicknameAndIdNot(newNickname, 1L);
+        verify(userRepository).save(userDao);
+        verify(userMapper).toDto(userDao);
     }
 
     @Test
+    @DisplayName("Бросает BadRequestException, если новый никнейм занят другим пользователем")
     void updateNickname_shouldThrowException_whenNewNicknameIsTakenByAnotherUser() {
-        // Arrange
         Long chatId = 100L;
-        String oldNickname = "old_name";
-        String newNickname = "taken_name";
 
         UserDao userDao = UserDao.builder()
                 .id(1L)
                 .telegramChatId(chatId)
-                .nickname(oldNickname)
+                .nickname("old_name")
                 .build();
 
-        /*
-         * Находим текущего пользователя.
-         */
         when(userRepository.findByTelegramChatId(chatId))
                 .thenReturn(Optional.of(userDao));
 
-        /*
-         * Новый никнейм уже занят.
-         */
-        when(userRepository.existsByNickname(newNickname))
+        when(userRepository.existsByNicknameAndIdNot("taken_name", 1L))
                 .thenReturn(true);
 
-        // Act
-        BadRequestException exception = assertThrows(
-                BadRequestException.class,
-                () -> userService.updateNickname(chatId, newNickname)
-        );
+        assertThatThrownBy(() ->
+                userService.updateNickname(chatId, "taken_name"))
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage("Никнейм @taken_name уже занят");
 
-        // Assert
-        assertEquals(
-                "Nickname @" + newNickname + " is already taken",
-                exception.getMessage()
-        );
+        assertThat(userDao.getNickname()).isEqualTo("old_name");
 
-        /*
-         * Старый никнейм не должен измениться.
-         */
-        assertEquals(oldNickname, userDao.getNickname());
-
-    /*
-     * Пользователь не должен сохраняться,
-       если новый никнейм занят.
-    */
-        verify(userRepository, never())
-                .save(any(UserDao.class));
-
-        verify(userMapper, never())
-                .toDto(any(UserDao.class));
+        verify(userRepository, never()).save(any(UserDao.class));
+        verify(userMapper, never()).toDto(any(UserDao.class));
     }
 
     @Test
+    @DisplayName("Бросает NotFoundException, если пользователь не найден")
     void updateNickname_shouldThrowException_whenUserDoesNotExist() {
-        // Arrange
-        Long chatId = 999L;
-        String newNickname = "new_name";
-
-        /*
-         * Пользователь с таким chatId отсутствует.
-         */
-        when(userRepository.findByTelegramChatId(chatId))
+        when(userRepository.findByTelegramChatId(999L))
                 .thenReturn(Optional.empty());
 
-        // Act
-        NotFoundException exception = assertThrows(
-                NotFoundException.class,
-                () -> userService.updateNickname(chatId, newNickname)
-        );
-
-        // Assert
-        assertEquals(
-                "User with chatId " + chatId + " not found",
-                exception.getMessage()
-        );
-
-    /*
-     * Если пользователь не найден,
-       остальные операции выполняться не должны.
-    */
-        verify(userRepository, never())
-                .existsByNickname(anyString());
+        assertThatThrownBy(() ->
+                userService.updateNickname(999L, "new_name"))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage("Пользователь с chatId 999 не найден");
 
         verify(userRepository, never())
-                .save(any(UserDao.class));
-
-        verify(userMapper, never())
-                .toDto(any(UserDao.class));
+                .existsByNicknameAndIdNot(anyString(), any());
+        verify(userRepository, never()).save(any(UserDao.class));
+        verify(userMapper, never()).toDto(any(UserDao.class));
     }
 }
