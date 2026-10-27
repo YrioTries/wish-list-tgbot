@@ -1,10 +1,9 @@
 package ru.javabot.telegrambot;
 
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
 import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateConsumer;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -17,29 +16,32 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
+import ru.javabot.interaction_api.model.user.client.UserClient;
+import ru.javabot.interaction_api.model.wish.client.WishClient;
+import ru.javabot.interaction_api.model.wishlist.client.WishlistClient;
 
 import java.util.List;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
 
     private final TelegramClient telegramClient;
+    private final UserClient userClient;
+    private final WishClient wishClient;
+    private final WishlistClient wishlistClient;
 
-    public UpdateConsumer(@Value("${telegram.bot.token}") String botToken) {
-        this.telegramClient = new OkHttpTelegramClient(
-                botToken
-        );
-    }
 
     @SneakyThrows
     @Override
     public void consume(Update update) {
-        if (update.hasMessage()) {
+        if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
             Long chatId = update.getMessage().getChatId();
 
             switch (messageText) {
+                case "/help" -> sendHelp(chatId);
                 case "/start" -> sendMainMenu(chatId);
                 case "/keyboard" -> sendKeyBoard(chatId);
                 case "Привет" -> sendMyName(chatId, update.getMessage().getFrom());
@@ -60,6 +62,10 @@ public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
         }
     }
 
+    private void sendHelp(Long chatId) {
+        sendMessage(chatId, "Скоро появятся подсказки...");
+    }
+
     private void sendMyName(Long chatId, User user) {
         var text = "Привет!\n\nТебя зовут: %s\nВаш ник: @%s"
                 .formatted(
@@ -69,6 +75,9 @@ public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
 
         sendMessage(chatId, text);
     }
+
+
+
 
     private void sendKeyBoard(Long chatId) throws TelegramApiException {
 

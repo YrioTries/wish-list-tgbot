@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javabot.interaction_api.exeption.BadRequestException;
 import ru.javabot.interaction_api.exeption.NotFoundException;
-import ru.javabot.interaction_api.model.user.dto.CreateUserRequest;
+import ru.javabot.interaction_api.model.user.dto.UserRequest;
 import ru.javabot.interaction_api.model.user.dto.UserDto;
 import ru.javabot.user.dao.UserDao;
 import ru.javabot.user.dao.UserMapper;
@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDto addNewUser(CreateUserRequest userRequest) {
+    public UserDto addNewUser(UserRequest userRequest) {
         String nickname = normalizeUsername(userRequest.getNickname());
 
         if (nickname != null &&
@@ -68,22 +68,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDto updateNickname(
-            Long chatId,
-            String newNickname
-    ) {
+    public UserDto updateNickname(UserRequest request) {
         UserDao userDao = userRepository
-                .findByTelegramChatId(chatId)
+                .findByTelegramChatId(request.getTelegramChatId())
                 .orElseThrow(() ->
                         new NotFoundException(
                                 "Пользователь с chatId " +
-                                        chatId +
+                                        request.getTelegramChatId() +
                                         " не найден"
                         )
                 );
 
         String normalizedNickname =
-                normalizeUsername(newNickname);
+                normalizeUsername(request.getNickname());
 
         if (normalizedNickname == null) {
             throw new BadRequestException(
