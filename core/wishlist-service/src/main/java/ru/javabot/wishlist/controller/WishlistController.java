@@ -17,14 +17,14 @@ import java.util.List;
 public class WishlistController {
     private final WishlistService wishlistService;
 
-    @GetMapping
-    public List<WishlistDto> showWishlistsOfUser(Long ownerId) {
+    @GetMapping("/{ownerId}")
+    public List<WishlistDto> showWishlistsOfUser(@PathVariable Long ownerId) {
         return wishlistService.showWishlists(ownerId);
     }
 
-    @PostMapping
+    @PostMapping("/{ownerId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public WishlistDto addNewWishlist(Long ownerId, @RequestBody CreateWishlistRequest wishlistRequest) {
+    public WishlistDto addNewWishlist(@PathVariable Long ownerId, @RequestBody CreateWishlistRequest wishlistRequest) {
         return wishlistService.addNewWishlist(ownerId, wishlistRequest);
     }
 }
