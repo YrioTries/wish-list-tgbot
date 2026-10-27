@@ -1,0 +1,35 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    config:
+      discovery:
+        enabled: true
+
+    gateway:
+      discovery:
+        locator:
+          enabled: true  # Включает автоматическое создание маршрутов для сервисов, зарегистрированных в Eureka
+
+      routes:
+        - id: user-service-route
+          uri: lb://user-service
+          predicates:
+            - Path=/users/**
+          filters:
+            - StripPrefix=0
+
+        - id: wishlist-service-route
+          uri: lb://wishlist-service
+          predicates:
+            - Path=/presents/wishlist/**
+          filters:
+            - StripPrefix=0
+
+        - id: wish-service-route
+          uri: lb://wish-service
+          predicates:
+            - Path=/presents/wish/**
+          filters:
+            - StripPrefix=0

@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>core</artifactId>
+    <packaging>pom</packaging>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -17,11 +18,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-    </dependencies>
+    <modules>
+        <module>wish-service</module>
+        <module>telegram-bot</module>
+        <module>wishlist-service</module>
+        <module>interaction-api</module>
+        <module>user-service</module>
+    </modules>
 
 </project>
