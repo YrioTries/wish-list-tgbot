@@ -42,6 +42,9 @@
 		<avro.version>1.11.3</avro.version>
 		<kafka-clients.version>3.6.1</kafka-clients.version>
 
+		<!-- allure -->
+		<allure-junit5.version>2.6.0</allure-junit5.version>
+
 		<!-- API Documentation -->
 		<springdoc-openapi-starter.version>2.6.0</springdoc-openapi-starter.version>
 
@@ -61,6 +64,7 @@
 		<!-- Compiler & Build -->
 		<maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
 		<maven.surefire.plugin.version>3.1.2</maven.surefire.plugin.version>
+		<maven-surefire-plugin.version>2.21.0</maven-surefire-plugin.version>
 
 		<!-- Code Quality & Analysis -->
 		<spotbugs.maven.plugin.version>4.8.5.0</spotbugs.maven.plugin.version>
@@ -71,6 +75,12 @@
 		<!-- Code Generation Plugins -->
 		<avro-maven-plugin.version>${avro.version}</avro-maven-plugin.version>
 		<protobuf-plugin.version>2.4.0</protobuf-plugin.version>
+
+		<!-- allure -->
+		<maven-surefire-plugin.version>2.20.1</maven-surefire-plugin.version>
+		<aspectj.version>1.8.10</aspectj.version>
+
+		<aspectj.version>1.9.23</aspectj.version>
 	</properties>
 
 
@@ -215,6 +225,13 @@
 				<artifactId>lombok-mapstruct-binding</artifactId>
 				<version>${lombok-mapstruct-binding.version}</version>
 			</dependency>
+
+            <!--Allure-->
+			<dependency>
+				<groupId>io.qameta.allure</groupId>
+				<artifactId>allure-junit5</artifactId>
+				<version>${allure-junit5.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -256,6 +273,16 @@
 							<version>10.3</version>
 						</dependency>
 					</dependencies>
+				</plugin>
+
+				<plugin>
+					<groupId>io.qameta.allure</groupId>
+					<artifactId>allure-maven</artifactId>
+					<version>2.9</version>
+					<configuration>
+						<reportVersion>2.6.0</reportVersion>
+						<resultsDirectory>${project.build.directory}/allure-results</resultsDirectory>
+					</configuration>
 				</plugin>
 
 				<plugin>
@@ -377,10 +404,39 @@
 					<version>${avro-maven-plugin.version}</version>
 				</plugin>
 
+
 				<plugin>
 					<groupId>io.github.ascopes</groupId>
 					<artifactId>protobuf-maven-plugin</artifactId>
 					<version>${protobuf-plugin.version}</version>
+				</plugin>
+
+				<plugin>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>${maven-surefire-plugin.version}</version>
+					<configuration>
+						<testFailureIgnore>false</testFailureIgnore>
+						<argLine>
+							-javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+						</argLine>
+						<systemProperties>
+							<property>
+								<name>junit.jupiter.extensions.autodetection.enabled</name>
+								<value>true</value>
+							</property>
+							<property>
+								<name>allure.results.directory</name>
+								<value>${project.build.directory}/allure-results</value>
+							</property>
+						</systemProperties>
+					</configuration>
+					<dependencies>
+						<dependency>
+							<groupId>org.aspectj</groupId>
+							<artifactId>aspectjweaver</artifactId>
+							<version>${aspectj.version}</version>
+						</dependency>
+					</dependencies>
 				</plugin>
 			</plugins>
 		</pluginManagement>

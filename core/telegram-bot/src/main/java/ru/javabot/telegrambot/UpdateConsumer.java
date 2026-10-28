@@ -76,9 +76,6 @@ public class UpdateConsumer implements LongPollingSingleThreadUpdateConsumer {
         sendMessage(chatId, text);
     }
 
-
-
-
     private void sendKeyBoard(Long chatId) throws TelegramApiException {
 
         SendMessage message = SendMessage.builder()
