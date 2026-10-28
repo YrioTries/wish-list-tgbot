@@ -1,0 +1,1 @@
+{"uuid":"6e9f0fce-3dc2-4c1c-8951-16b74f392605","historyId":"b488b6ab012d815bae00bdc46b74c000","labels":[{"name":"suite","value":"ru.javabot.user.UserServiceImplTest"},{"name":"package","value":"ru.javabot.user.UserServiceImplTest"}],"name":"Обновляет никнейм, если новый никнейм свободен","status":"passed","stage":"finished","start":1793198189843,"stop":1793198189845}

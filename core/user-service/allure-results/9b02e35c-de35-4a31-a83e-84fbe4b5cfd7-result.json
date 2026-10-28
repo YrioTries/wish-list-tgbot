@@ -1,0 +1,1 @@
+{"uuid":"9b02e35c-de35-4a31-a83e-84fbe4b5cfd7","historyId":"e5c29c1ec42228eb400e01d45c7cd616","labels":[{"name":"suite","value":"ru.javabot.user.UserServiceImplTest"},{"name":"package","value":"ru.javabot.user.UserServiceImplTest"}],"name":"Находит пользователя по нормализованному никнейму","status":"passed","stage":"finished","start":1793198187997,"stop":1793198189668}

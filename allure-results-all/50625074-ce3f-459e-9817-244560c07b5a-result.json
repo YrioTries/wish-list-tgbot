@@ -1,0 +1,1 @@
+{"uuid":"50625074-ce3f-459e-9817-244560c07b5a","historyId":"f48f7a28735fdd243c4b9aaba83909f7","labels":[{"name":"suite","value":"ru.javabot.wish.WishServiceImplTest"},{"name":"package","value":"ru.javabot.wish.WishServiceImplTest"}],"name":"Переиспользует существующую reference и не создаёт новую","status":"passed","stage":"finished","start":1793201217242,"stop":1793201217245}
