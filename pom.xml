@@ -44,6 +44,7 @@
 
 		<!-- allure -->
 		<allure-junit5.version>2.6.0</allure-junit5.version>
+		<aspectj.version>1.9.23</aspectj.version>
 
 		<!-- API Documentation -->
 		<springdoc-openapi-starter.version>2.6.0</springdoc-openapi-starter.version>
@@ -63,8 +64,7 @@
 
 		<!-- Compiler & Build -->
 		<maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
-		<maven.surefire.plugin.version>3.1.2</maven.surefire.plugin.version>
-		<maven-surefire-plugin.version>2.21.0</maven-surefire-plugin.version>
+		<maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
 
 		<!-- Code Quality & Analysis -->
 		<spotbugs.maven.plugin.version>4.8.5.0</spotbugs.maven.plugin.version>
@@ -75,12 +75,6 @@
 		<!-- Code Generation Plugins -->
 		<avro-maven-plugin.version>${avro.version}</avro-maven-plugin.version>
 		<protobuf-plugin.version>2.4.0</protobuf-plugin.version>
-
-		<!-- allure -->
-		<maven-surefire-plugin.version>2.20.1</maven-surefire-plugin.version>
-		<aspectj.version>1.8.10</aspectj.version>
-
-		<aspectj.version>1.9.23</aspectj.version>
 	</properties>
 
 
