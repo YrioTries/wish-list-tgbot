@@ -1,1 +1,0 @@
-{"uuid":"6da96c09-d481-4a68-a849-8e56b16f33a9","historyId":"4181d0d3533f1447acae238c35dc68ba","labels":[{"name":"suite","value":"ru.javabot.user.UserServiceImplTest"},{"name":"package","value":"ru.javabot.user.UserServiceImplTest"}],"name":"Бросает BadRequestException, если никнейм уже существует","status":"passed","stage":"finished","start":1793201209036,"stop":1793201209038}

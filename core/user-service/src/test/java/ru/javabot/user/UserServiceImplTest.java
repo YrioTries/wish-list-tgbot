@@ -1,5 +1,6 @@
 package ru.javabot.user;
 
+import io.qameta.allure.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,6 +46,10 @@ class UserServiceImplTest {
     private ArgumentCaptor<UserDao> userDaoCaptor;
 
     @Test
+    @Feature("Поиск пользователя")
+    @Story("Успешный поиск по никнейму")
+    @Severity(SeverityLevel.CRITICAL)
+    @Description("Проверяет, что сервис возвращает DTO пользователя, если он найден по никнейму")
     @DisplayName("Находит пользователя по нормализованному никнейму")
     void findUserByNickname_shouldReturnUser_whenUserExists() {
         String nickname = "dmitriy";
@@ -71,6 +76,10 @@ class UserServiceImplTest {
     }
 
     @Test
+    @Feature("Поиск пользователя")
+    @Story("Ошибка: пользователь не найден")
+    @Severity(SeverityLevel.NORMAL)
+    @Description("Проверяет, что сервис бросает NotFoundException, если пользователь не найден")
     @DisplayName("Бросает NotFoundException, если пользователь не найден")
     void findUserByNickname_shouldThrowException_whenUserDoesNotExist() {
         when(userRepository.findByNickname("unknown"))
@@ -84,6 +93,10 @@ class UserServiceImplTest {
     }
 
     @Test
+    @Feature("Регистрация пользователя")
+    @Story("Успешная регистрация")
+    @Severity(SeverityLevel.CRITICAL)
+    @Description("Проверяет, что сервис создаёт нового пользователя, если никнейм свободен")
     @DisplayName("Создаёт пользователя, если никнейм свободен")
     void addNewUser_shouldCreateUser_whenNicknameIsFree() {
         UserRequest request = new UserRequest(100L, "dmitriy");
@@ -115,6 +128,10 @@ class UserServiceImplTest {
     }
 
     @Test
+    @Feature("Регистрация пользователя")
+    @Story("Ошибка: никнейм уже занят")
+    @Severity(SeverityLevel.NORMAL)
+    @Description("Проверяет, что сервис бросает BadRequestException, если никнейм уже существует")
     @DisplayName("Бросает BadRequestException, если никнейм уже существует")
     void addNewUser_shouldThrowException_whenNicknameAlreadyExists() {
         UserRequest request = new UserRequest(100L, "dmitriy");
@@ -131,6 +148,10 @@ class UserServiceImplTest {
     }
 
     @Test
+    @Feature("Обновление никнейма")
+    @Story("Успешное обновление")
+    @Severity(SeverityLevel.CRITICAL)
+    @Description("Проверяет, что сервис обновляет никнейм, если новый никнейм свободен")
     @DisplayName("Обновляет никнейм, если новый никнейм свободен")
     void updateNickname_shouldUpdateNickname_whenNewNicknameIsFree() {
         UserRequest userRequest = new UserRequest(100L, "new_name");
@@ -163,6 +184,9 @@ class UserServiceImplTest {
     }
 
     @Test
+    @Feature("Обновление никнейма")
+    @Story("Ошибка: никнейм занят")
+    @Severity(SeverityLevel.NORMAL)
     @DisplayName("Бросает BadRequestException, если новый никнейм занят другим пользователем")
     void updateNickname_shouldThrowException_whenNewNicknameIsTakenByAnotherUser() {
         Long chatId = 100L;
@@ -192,6 +216,9 @@ class UserServiceImplTest {
     }
 
     @Test
+    @Feature("Обновление никнейма")
+    @Story("Ошибка: пользователь не найден")
+    @Severity(SeverityLevel.NORMAL)
     @DisplayName("Бросает NotFoundException, если пользователь не найден")
     void updateNickname_shouldThrowException_whenUserDoesNotExist() {
         UserRequest request = new UserRequest(999L, "new_name");
