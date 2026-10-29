@@ -65,6 +65,7 @@
 		<!-- Compiler & Build -->
 		<maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
 		<maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
+		<maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
 
 		<!-- Code Quality & Analysis -->
 		<spotbugs.maven.plugin.version>4.8.5.0</spotbugs.maven.plugin.version>
@@ -295,7 +296,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-resources-plugin</artifactId>
-					<version>3.3.1</version>
+					<version>${maven-resources-plugin.version}</version>
 					<executions>
 						<execution>
 							<id>copy-allure-resources</id>
@@ -310,7 +311,6 @@
 										<directory>src/test/resources</directory>
 										<includes>
 											<include>categories.json</include>
-											<include>environment.properties</include>
 										</includes>
 									</resource>
 								</resources>
