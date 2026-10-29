@@ -1,5 +1,6 @@
 package ru.javabot.wish;
 
+import io.qameta.allure.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,6 +29,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
+@Epic("Управление желаниями")
 @ExtendWith(MockitoExtension.class)
 class WishServiceImplTest {
 
@@ -50,6 +52,10 @@ class WishServiceImplTest {
     private ArgumentCaptor<List<ReferenceDao>> referencesCaptor;
 
     @Test
+    @Feature("Создание желаний")
+    @Story("Создание с новыми справочниками")
+    @Severity(SeverityLevel.CRITICAL)
+    @Description("Проверяет, что при создании желаний создаются новые справочники и корректно связываются с желаниями")
     @DisplayName("Создаёт wishes, новые references и связывает их корректно")
     void createWishes_shouldCreateWishesWithNewReferences() {
         Long wishlistId = 1L;
@@ -138,6 +144,9 @@ class WishServiceImplTest {
     }
 
     @Test
+    @Feature("Создание желаний")
+    @Story("Переиспользование существующих справочников")
+    @Severity(SeverityLevel.NORMAL)
     @DisplayName("Переиспользует существующую reference и не создаёт новую")
     void createWishes_shouldReuseExistingReferences() {
         Long wishlistId = 1L;

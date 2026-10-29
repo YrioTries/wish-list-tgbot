@@ -1,1 +1,0 @@
-{"uuid":"d59d0940-bf03-4249-a42d-eddecbf18c6d","historyId":"d6c025be68eb31272ecb4c0cbf4e6cf6","labels":[{"name":"suite","value":"ru.javabot.wish.WishServiceImplTest"},{"name":"package","value":"ru.javabot.wish.WishServiceImplTest"}],"name":"Создаёт wishes, новые references и связывает их корректно","status":"passed","stage":"finished","start":1793199672511,"stop":1793199673647}

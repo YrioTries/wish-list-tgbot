@@ -1,1 +1,0 @@
-{"uuid":"d0d55fed-cd96-4d95-8aa6-645a1fe79838","historyId":"93aa93d02e4aa23bb244828c24bf07da","labels":[{"name":"suite","value":"ru.javabot.user.UserServiceImplTest"},{"name":"package","value":"ru.javabot.user.UserServiceImplTest"}],"name":"Создаёт пользователя, если никнейм свободен","status":"passed","stage":"finished","start":1793198189949,"stop":1793198189958}

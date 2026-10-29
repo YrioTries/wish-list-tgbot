@@ -1,1 +1,0 @@
-{"uuid":"40d8b4f4-d468-4960-a6fc-449b60a90d43","historyId":"2c4d24d8e0bd8181b2643dd1d556cbd6","labels":[{"name":"suite","value":"ru.javabot.user.UserServiceImplTest"},{"name":"package","value":"ru.javabot.user.UserServiceImplTest"}],"name":"Бросает NotFoundException, если пользователь не найден","status":"passed","stage":"finished","start":1793198189824,"stop":1793198189835}
