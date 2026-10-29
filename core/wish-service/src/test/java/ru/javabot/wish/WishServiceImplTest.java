@@ -2,6 +2,7 @@ package ru.javabot.wish;
 
 import io.qameta.allure.*;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -52,6 +53,7 @@ class WishServiceImplTest {
     private ArgumentCaptor<List<ReferenceDao>> referencesCaptor;
 
     @Test
+    @Tag("smoke")
     @Feature("Создание желаний")
     @Story("Создание с новыми справочниками")
     @Severity(SeverityLevel.CRITICAL)
@@ -144,6 +146,7 @@ class WishServiceImplTest {
     }
 
     @Test
+    @Tag("regression")
     @Feature("Создание желаний")
     @Story("Переиспользование существующих справочников")
     @Severity(SeverityLevel.NORMAL)
