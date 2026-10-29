@@ -2,6 +2,7 @@ package ru.javabot.user;
 
 import io.qameta.allure.*;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -47,6 +48,7 @@ class UserServiceImplTest {
     private ArgumentCaptor<UserDao> userDaoCaptor;
 
     @Test
+    @Tag("smoke")
     @Feature("Поиск пользователя")
     @Story("Успешный поиск по никнейму")
     @Severity(SeverityLevel.CRITICAL)
@@ -77,6 +79,7 @@ class UserServiceImplTest {
     }
 
     @Test
+    @Tag("regression")
     @Feature("Поиск пользователя")
     @Story("Ошибка: пользователь не найден")
     @Severity(SeverityLevel.NORMAL)
@@ -94,6 +97,7 @@ class UserServiceImplTest {
     }
 
     @Test
+    @Tag("smoke")
     @Feature("Регистрация пользователя")
     @Story("Успешная регистрация")
     @Severity(SeverityLevel.CRITICAL)
@@ -129,6 +133,7 @@ class UserServiceImplTest {
     }
 
     @Test
+    @Tag("regression")
     @Feature("Регистрация пользователя")
     @Story("Ошибка: никнейм уже занят")
     @Severity(SeverityLevel.NORMAL)
@@ -149,6 +154,7 @@ class UserServiceImplTest {
     }
 
     @Test
+    @Tag("smoke")
     @Feature("Обновление никнейма")
     @Story("Успешное обновление")
     @Severity(SeverityLevel.CRITICAL)
@@ -185,6 +191,7 @@ class UserServiceImplTest {
     }
 
     @Test
+    @Tag("regression")
     @Feature("Обновление никнейма")
     @Story("Ошибка: никнейм занят")
     @Severity(SeverityLevel.NORMAL)
@@ -217,6 +224,7 @@ class UserServiceImplTest {
     }
 
     @Test
+    @Tag("regression")
     @Feature("Обновление никнейма")
     @Story("Ошибка: пользователь не найден")
     @Severity(SeverityLevel.NORMAL)
