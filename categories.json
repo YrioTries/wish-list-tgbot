@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Ошибки валидации (BadRequest)",
+    "matchedStatuses": ["failed", "broken"],
+    "messageRegex": ".*BadRequestException.*"
+  },
+  {
+    "name": "Конфликты данных (Conflict)",
+    "matchedStatuses": ["failed", "broken"],
+    "messageRegex": ".*ConflictException.*"
+  },
+  {
+    "name": "Ресурс не найден (NotFound)",
+    "matchedStatuses": ["failed", "broken"],
+    "messageRegex": ".*NotFoundException.*"
+  },
+  {
+    "name": "Проблемы с БД",
+    "matchedStatuses": ["broken"],
+    "traceRegex": ".*SQLException.*"
+  },
+  {
+    "name": "Неизвестные ошибки",
+    "matchedStatuses": ["failed", "broken"]
+  }
+]
