@@ -1,5 +1,6 @@
 package ru.javabot.wishlist;
 
+import io.qameta.allure.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +26,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
+@Epic("Управление списками желаний")
 @ExtendWith(MockitoExtension.class)
 class WishlistServiceImplTest {
 
@@ -41,6 +43,10 @@ class WishlistServiceImplTest {
     private ArgumentCaptor<WishlistDao> wishlistDaoCaptor;
 
     @Test
+    @Feature("Создание списка")
+    @Story("Успешное создание списка")
+    @Severity(SeverityLevel.CRITICAL)
+    @Description("Проверяет, что при создании списка устанавливается ownerId, список сохраняется и возвращается DTO")
     @DisplayName("addNewWishlist: устанавливает ownerId, сохраняет wishlist и возвращает DTO")
     void addNewWishlist_shouldSetOwnerIdAndReturnDto() {
         Long ownerId = 10L;
@@ -90,6 +96,10 @@ class WishlistServiceImplTest {
     }
 
     @Test
+    @Feature("Просмотр списков")
+    @Story("Успешный просмотр всех списков")
+    @Severity(SeverityLevel.NORMAL)
+    @Description("Проверяет, что при запросе списков пользователя возвращаются DTO всех его списков")
     @DisplayName("showWishlists: возвращает DTO всех wishlists пользователя")
     void showWishlists_shouldMapAllDaoToDto() {
         Long ownerId = 10L;
@@ -132,6 +142,10 @@ class WishlistServiceImplTest {
     }
 
     @Test
+    @Feature("Просмотр списков")
+    @Story("Просмотр пустого списка")
+    @Severity(SeverityLevel.MINOR)
+    @Description("Проверяет, что при отсутствии списков у пользователя возвращается пустой список")
     @DisplayName("showWishlists: возвращает пустой список, если wishlists нет")
     void showWishlists_shouldReturnEmptyList() {
         Long ownerId = 10L;
