@@ -2,6 +2,7 @@ package ru.javabot.wishlist;
 
 import io.qameta.allure.*;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -43,6 +44,7 @@ class WishlistServiceImplTest {
     private ArgumentCaptor<WishlistDao> wishlistDaoCaptor;
 
     @Test
+    @Tag("smoke")
     @Feature("Создание списка")
     @Story("Успешное создание списка")
     @Severity(SeverityLevel.CRITICAL)
@@ -96,6 +98,7 @@ class WishlistServiceImplTest {
     }
 
     @Test
+    @Tag("regression")
     @Feature("Просмотр списков")
     @Story("Успешный просмотр всех списков")
     @Severity(SeverityLevel.NORMAL)
@@ -142,6 +145,7 @@ class WishlistServiceImplTest {
     }
 
     @Test
+    @Tag("regression")
     @Feature("Просмотр списков")
     @Story("Просмотр пустого списка")
     @Severity(SeverityLevel.MINOR)
